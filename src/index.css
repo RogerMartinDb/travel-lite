@@ -1,53 +1,55 @@
 body {
-  font: 14px "Century Gothic", Futura, sans-serif;
-  margin: 20px;
+  padding-top: 50px;
+  padding-bottom: 20px;
 }
 
-ol, ul {
-  padding-left: 30px;
+/* Set padding to keep content from hitting the edges */
+.body-content {
+  padding-left: 15px;
+  padding-right: 15px;
 }
 
-.result {
-  font-family: Courier New, Courier, monospace
-}
-.board-row:after {
-  clear: both;
-  content: "";
-  display: table;
+/* Override the default bootstrap behavior where horizontal description lists 
+ will truncate terms that are too long to fit in the left column.
+*/
+.dl-horizontal dt {
+  white-space: normal;
 }
 
-.status {
-  margin-bottom: 10px;
+.departure-criteria dt {
+  font-weight: normal;
+  font-style: italic;
 }
 
-.square {
-  background: #fff;
-  border: 1px solid #999;
-  float: left;
-  font-size: 24px;
-  font-weight: bold;
-  line-height: 34px;
-  height: 34px;
-  margin-right: -1px;
-  margin-top: -1px;
-  padding: 0;
-  text-align: center;
-  width: 34px;
+/* Set width on the form input elements since they're 100% wide by default */
+input,
+select,
+textarea {
+  max-width: 280px;
 }
 
-.square:focus {
-  outline: none;
+.navbar-default {
+  background-color: #76b940;
+  background: linear-gradient(to top,#259341 0%,#77b93f 100%);
+  background: -webkit-linear-gradient(bottom,#259341 0%,#77b93f 100%);
 }
 
-.kbd-navigation .square:focus {
-  background: #ddd;
+.navbar-default .navbar-brand {
+  color: whitesmoke;
 }
 
-.game {
-  display: flex;
-  flex-direction: row;
+.navbar-default .navbar-nav > li > a {
+  color: whitesmoke;
 }
 
-.game-info {
-  margin-left: 20px;
+.panel {
+ border-radius: 12px;
+}
+
+.current-time {
+  margin-bottom: 20px;
+}
+
+.initially-hidden {
+  display: none;
 }

@@ -1,11 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import Collator from './lib/journey'
-import Journey from './components/journeys'
+import Journeys from './components/journeys'
 import './index.css';
 
 // ========================================
-
 
 let jd=[
   {
@@ -25,6 +23,16 @@ let jd=[
     ]
   },
   {
+    name: 'School to  home',
+    options: [
+      {
+        id: 1,
+        type: "Bus",
+        stopId: '00526'
+      }
+    ]
+  },
+  {
     name: 'Work to  home',
     options: [
       {
@@ -39,6 +47,6 @@ let jd=[
 
 
 ReactDOM.render(
-  <Journey journeyName={jd[0].name} businessLogic={new Collator(jd[0].options)}/>,
+  <Journeys journeyDefinitions={jd}/>,
   document.getElementById('root')
 );

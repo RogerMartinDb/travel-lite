@@ -1,8 +1,9 @@
 import React from 'react';
+import Collator from '../lib/collator'
 
 class LoadJourneys extends React.Component{
   render(){
-    return <input type='button' onClick={()=>this.props.onClick()} value='Refresh' />
+    return <input type='button' onClick={()=>this.props.onClick()} value='Get Times...' />
   }
 }
 
@@ -12,26 +13,28 @@ class Timetable extends React.Component{
 
     return (
       <div>
-        <h1>{this.props.name}</h1>
-      <table>
-        <tbody>
-        {rows.map((departure, i) => this.renderRow(departure, i))}
-        </tbody>
-      </table>
+        <div className="panel-heading">
+          <h1 className="panel-title">{this.props.name}</h1>
+        </div>
+        <div className="panel-body">
+          <ul className="list-group">
+            {rows.map((departure, i) => this.renderRow(departure, i))}
+          </ul>
+        </div>
       </div>
     );
   }
 
   renderRow(departure, i){
     return (
-      <tr key={i}>
-        <td>{departure.service}</td><td>{departure.destination}</td><td>{departure.expDepart}</td>
-      </tr>
+      <li className="list-group-item" key={i}>
+        <b>{departure.service}</b> {departure.destination}: {departure.expDepart}
+      </li>
     )
   }
 }
 
-export default class Journey extends React.Component{
+class Journey extends React.Component{
   constructor(props){
     super(props);
     this.businessLogic = props.businessLogic;
@@ -42,9 +45,9 @@ export default class Journey extends React.Component{
 
   render(){
     return (
-      <div>
-        <Timetable name={this.props.journeyName} departures={this.state.departures}/><br/>
+      <div className="col-md-4 panel panel-success well well-sm">
         <LoadJourneys onClick={()=>this.loadJourney()}/><br/>
+        <Timetable name={this.props.journeyName} departures={this.state.departures}/><br/>
       </div>
     );
   }
@@ -55,5 +58,19 @@ export default class Journey extends React.Component{
         departures: newDepartures
       })
     )
+  }
+}
+
+export default class Journeys extends React.Component{
+  constructor(props){
+    super(props);
+    this.journeyDefinitions = props.journeyDefinitions;
+  }
+
+  render(){
+    let journeys = this.journeyDefinitions.map(jd => {
+      return(<div><Journey journeyName={jd.name} businessLogic={new Collator(jd.options)}/></div>)
+    });
+    return (<div className="row journeys">{journeys}</div>);
   }
 }
