@@ -12,7 +12,7 @@ class Timetable extends React.Component{
     let rows = Array.from(this.props.departures);
 
     return (
-      <div>
+      <div className="col-md-4 panel panel-success well well-sm">
         <div className="panel-heading">
           <h1 className="panel-title">{this.props.name}</h1>
         </div>
@@ -45,7 +45,7 @@ class Journey extends React.Component{
 
   render(){
     return (
-      <div className="col-md-4 panel panel-success well well-sm">
+      <div>
         <LoadJourneys onClick={()=>this.loadJourney()}/><br/>
         <Timetable name={this.props.journeyName} departures={this.state.departures}/><br/>
       </div>
@@ -69,7 +69,7 @@ export default class Journeys extends React.Component{
 
   render(){
     let journeys = this.journeyDefinitions.map(jd => {
-      return(<div><Journey journeyName={jd.name} businessLogic={new Collator(jd.options)}/></div>)
+      return(<Journey key={jd.name} journeyName={jd.name} businessLogic={new Collator(jd.options)}/>)
     });
     return (<div className="row journeys">{journeys}</div>);
   }
