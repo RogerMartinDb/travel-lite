@@ -9,6 +9,15 @@ body {
   padding-right: 15px;
 }
 
+.dark {
+  background-color: #1c5771;
+}
+
+.flash{
+  background-color: #68c4ec;
+}
+
+
 /* Override the default bootstrap behavior where horizontal description lists 
  will truncate terms that are too long to fit in the left column.
 */
@@ -30,8 +39,8 @@ textarea {
 
 .navbar-default {
   background-color: #6c91e2;
-  background: linear-gradient(to top,#060399 0%,#6c91e2 100%);
-  background: -webkit-linear-gradient(bottom,#060399 0%,#6c91e2 100%);
+  background: linear-gradient(to top,#133c5e 0%,#3778b6 100%);
+  background: -webkit-linear-gradient(bottom,#133c5e 0%,#3778b6 100%);
 }
 
 .navbar-default .navbar-brand {

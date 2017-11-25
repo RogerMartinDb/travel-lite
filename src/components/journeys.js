@@ -1,18 +1,27 @@
 import React from 'react';
 import Collator from '../lib/collator'
 
-class LoadJourneys extends React.Component{
-  render(){
-    return <input type='button' onClick={()=>this.props.onClick()} value='Get Times...' />
-  }
-}
 
 class Timetable extends React.Component{
+  constructor(props){
+    super(props);
+    this.refresh = props.refresh;
+  }
+
+  componentDidMount(){
+    this.refresh();
+    this.timer = setInterval(this.refresh, 10000);
+  }
+
+  componentWillUnmount(){
+    clearInterval(this.timer);
+  }
+
   render(){
     let rows = Array.from(this.props.departures);
 
     return (
-      <div className="col-md-4 panel panel-success well well-sm">
+      <div className="col-md-4 panel panel-info well well-sm dark">
         <div className="panel-heading">
           <h1 className="panel-title">{this.props.name}</h1>
         </div>
@@ -46,8 +55,9 @@ class Journey extends React.Component{
   render(){
     return (
       <div>
-        <LoadJourneys onClick={()=>this.loadJourney()}/><br/>
-        <Timetable name={this.props.journeyName} departures={this.state.departures}/><br/>
+        <Timetable  name={this.props.journeyName} 
+                    departures={this.state.departures}
+                    refresh={()=>this.loadJourney()}/><br/>
       </div>
     );
   }
