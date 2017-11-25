@@ -37,7 +37,7 @@ class Timetable extends React.Component{
   renderRow(departure, i){
     return (
       <li className="list-group-item" key={i}>
-        <b>{departure.service}</b> {departure.destination}: {departure.expDepart}
+        <b>{departure.service}</b> {departure.destination}: {departure.dueAbsolute} ({departure.dueRelative})
       </li>
     )
   }

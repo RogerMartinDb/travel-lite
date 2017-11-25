@@ -1,3 +1,5 @@
+import DueStringParser from "./dueStringParser";
+
 export default class Collator{
   constructor(options){
     this.journeyOptions = options;
@@ -14,10 +16,24 @@ export default class Collator{
       xhr.onload = () => {
         this.departures = this.departures.filter(dep => dep.option !== option.id);
         handler.xmlParser(option, xhr.responseXML, this.departures);
+        this.processDueString(this.departures);
         onUpdate(this.departures.slice());
       };
       xhr.send();
     });
+  }
+
+  processDueString(departures){
+    departures.forEach(departure => {
+      if (departure.minutes == null){
+        let dueParser = new DueStringParser(departure.dueString);
+        departure.minutes = dueParser.minutes;
+        departure.dueRelative = dueParser.dueRelative;
+        departure.dueAbsolute = dueParser.dueAbsolute;
+      }
+    });
+
+    departures.sort((a,b) => { return a.minutes - b.minutes});
   }
 
   trainHandler = {
@@ -33,7 +49,7 @@ export default class Collator{
             option: option.id,
             service: train.querySelector("Traintype").textContent,
             destination: train.querySelector('Destination').textContent,
-            expDepart: train.querySelector("Expdepart").textContent,
+            dueString: train.querySelector("Expdepart").textContent,
           })
         }
       }
@@ -52,7 +68,7 @@ export default class Collator{
           option: option.id,
           service: cells[0].textContent,
           destination: cells[2].textContent,
-          expDepart: cells[4].textContent,
+          dueString: cells[4].textContent,
         })
       };
     }
