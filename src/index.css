@@ -10,7 +10,7 @@ body {
 }
 
 .dark {
-  background-color: #1c5771;
+  background-color: hsl(220, 56%, 48%);
 }
 
 .flash{
@@ -38,9 +38,9 @@ textarea {
 }
 
 .navbar-default {
-  background-color: #6c91e2;
-  background: linear-gradient(to top,#133c5e 0%,#3778b6 100%);
-  background: -webkit-linear-gradient(bottom,#133c5e 0%,#3778b6 100%);
+  background-color: hsl(242, 56%, 48%);
+  background: linear-gradient(bottom,hsl(220, 52%, 14%) 0%,hsl(242, 56%, 60%) 100%);
+  background: webkit-linear-gradient(bottom,hsl(220, 52%, 14%) 0%,hsl(242, 56%, 60%) 100%);
 }
 
 .navbar-default .navbar-brand {

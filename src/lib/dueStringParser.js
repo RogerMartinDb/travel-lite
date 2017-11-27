@@ -13,8 +13,8 @@ export default class DueStringParser{
     let match = dueString.match(/^(\d\d):(\d\d)$/);
 
     if(match){
-      let hour = parseInt(match[1]);
-      let minute = parseInt(match[2]);
+      let hour = parseInt(match[1], 10);
+      let minute = parseInt(match[2], 10);
 
       let dueTime = new Date(now.getFullYear(), now.getMonth(), now.getDate(), hour, minute);
 
@@ -26,7 +26,7 @@ export default class DueStringParser{
 
       this.minutes = minutes;
       this.dueAbsolute = dueString;
-      this.dueRelative = minutes == 0 ? "Due" : `${minutes} min`;
+      this.dueRelative = minutes === 0 ? "Due" : `${minutes} min`;
 
       return;
     }
@@ -35,7 +35,7 @@ export default class DueStringParser{
     
     if (match)
     {
-        this.minutes = parseInt(match[1]);
+        this.minutes = parseInt(match[1], 10);
         let dueTime = now;
         dueTime.setMinutes(now.getMinutes() + this.minutes);
         this.dueAbsolute = this.timeString(dueTime);

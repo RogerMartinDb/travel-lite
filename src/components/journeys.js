@@ -1,5 +1,6 @@
 import React from 'react';
 import Collator from '../lib/collator'
+import PageVisibility from 'react-page-visibility'
 
 
 class Timetable extends React.Component{
@@ -52,13 +53,22 @@ class Journey extends React.Component{
     };
   }
 
+  handleVisibilityChange(visibilityState, documentHidden){
+    if (!documentHidden){
+      this.setState({
+        departures: []
+      });
+      this.loadJourney();
+    }
+  }
+
   render(){
     return (
-      <div>
-        <Timetable  name={this.props.journeyName} 
-                    departures={this.state.departures}
-                    refresh={()=>this.loadJourney()}/><br/>
-      </div>
+        <PageVisibility onChange={()=>this.handleVisibilityChange()}>
+          <Timetable  name={this.props.journeyName} 
+                      departures={this.state.departures}
+                      refresh={()=>this.loadJourney()}/>
+        </PageVisibility>
     );
   }
 
@@ -66,8 +76,7 @@ class Journey extends React.Component{
     this.businessLogic.fetchDepartures(
       newDepartures => this.setState({
         departures: newDepartures
-      })
-    )
+      }))
   }
 }
 
