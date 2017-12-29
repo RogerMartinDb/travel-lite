@@ -24,7 +24,7 @@ class Timetable extends React.Component{
     return (
       <div className="col-md-4 panel panel-info well well-sm dark">
         <div className="panel-heading">
-          <h1 className="panel-title">{this.props.name}</h1>
+          <div className="panel-title">{this.props.name}</div>
         </div>
         <div className="panel-body">
           <ul className="list-group">
