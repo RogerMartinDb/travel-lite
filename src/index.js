@@ -18,7 +18,7 @@ let jd=[
       {
         id: 2,
         type: "Bus",
-        stopId: '00608'
+        stopId: '608'
       }
     ]
   },
@@ -28,7 +28,7 @@ let jd=[
       {
         id: 1,
         type: "Bus",
-        stopId: '00526'
+        stopId: '526'
       }
     ]
   },
