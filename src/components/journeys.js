@@ -2,7 +2,6 @@ import React from 'react';
 import Collator from '../lib/collator'
 import PageVisibility from 'react-page-visibility'
 
-
 class Timetable extends React.Component{
   constructor(props){
     super(props);
