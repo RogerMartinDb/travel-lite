@@ -45,12 +45,18 @@ export default class Collator{
         let train = trains[i];
 
         if (train.querySelector("Direction").textContent === option.direction){
-          departures.push({
-            option: option.id,
-            service: train.querySelector("Traintype").textContent,
-            destination: train.querySelector('Destination').textContent,
-            dueString: train.querySelector("Expdepart").textContent,
-          })
+
+          let trainType = train.querySelector("Traintype").textContent;
+
+          if (trainType === "DART")
+          {
+            departures.push({
+              option: option.id,
+              service: trainType,
+              destination: train.querySelector('Destination').textContent,
+              dueString: train.querySelector("Expdepart").textContent,
+            })
+          }
         }
       }
     }
