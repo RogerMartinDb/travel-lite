@@ -17,7 +17,7 @@ export default class Collator{
         this.departures = this.departures.filter(dep => dep.option !== option.id);
         handler.xmlParser(option, xhr.responseXML, this.departures);
         this.processDueString(this.departures);
-        onUpdate(this.departures.slice());
+        onUpdate(this.departures.slice(0,6));
       };
       xhr.send();
     });
