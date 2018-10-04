@@ -7,7 +7,7 @@
     "react": "^16.0.0",
     "react-dom": "^16.0.0",
     "react-page-visibility": "^1.0.0",
-    "react-scripts": "1.0.14"
+    "react-scripts": "^1.0.14"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -24,5 +24,17 @@
       "target": "http://www.rtpi.ie",
       "changeOrigin": true
     }
-  }
+  },
+  "description": "This project was bootstrapped with [Create React App](https://github.com/facebookincubator/create-react-app).",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/RogerMartinDb/travel-lite.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/RogerMartinDb/travel-lite/issues"
+  },
+  "homepage": "https://github.com/RogerMartinDb/travel-lite#readme"
 }
