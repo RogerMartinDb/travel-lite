@@ -1,0 +1,257 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <style>
+      body {
+        margin: 0px;
+        padding: 0px;
+      }
+      #myCanvas {
+        margin: 10px;
+      }
+    </style>
+  </head>
+  <body data-rsssl=1>
+    <table>
+      <tr>
+        <td width="180px">
+          <p>
+            A: (<input id="A" value="2, 9" size="4"/>)
+            <br/>
+            B: (<input id="B" value="3, 7" size="4"/>)
+          </p>
+          <p>
+            <input id="extend" value="extend" type="checkbox" />
+            <label for="extend">Elephant</label>
+          </p>
+          <p>
+            <input id="triangleAbove" value="triangleAbove" type="checkbox" />
+            <label for="triangleAbove">Triangle Above</label>
+          </p>
+          <p>
+            <input id="triangleBelow" value="triangleBelow" type="checkbox" />
+            <label for="triangleBelow">Triangle Below</label>
+          </p>
+          <p>
+            <input id="showSlope" type="button" value="Show Slope" />
+          </p>
+        </td>
+        <td>
+          <canvas id="myCanvas" width="820" height="620"></canvas>
+        </td>
+      </tr>
+    </table>
+    <script>
+      const inputs = document.getElementsByTagName("input");
+
+      for (let i = 0; i < inputs.length; ++i)
+        inputs[i].addEventListener('input', drawGraph);
+
+      document
+        .getElementById("showSlope")
+        .addEventListener("click", showSlope);
+
+      function showSlope(){
+        let A = readCoordinates("A");
+        let B = readCoordinates("B");
+
+        alert(`slope is ${slope(A, B)}`);
+      }
+
+      function calculateAxes(a, b){
+        var x = (calculateAxis(a[0], b[0]));
+        min_x = x[0];
+        max_x = x[1];
+        increment_x = x[2];
+
+        var y = (calculateAxis(a[1], b[1]));
+        min_y = y[0];
+        max_y = y[1];
+        increment_y = y[2];
+      }
+
+      function calculateAxis(a, b){
+        let min = Math.min(a, b, -1);
+        let max = Math.max(a, b, 1);
+
+        const number_of_notches = 15;
+
+        let shortfall = number_of_notches - (max - min);
+
+        if (shortfall > 0){
+          min -= Math.floor(shortfall/3);
+          max += Math.ceil(shortfall*2/3);
+        }
+
+        let size = max - min;
+
+        let increment = size / 15;
+        let order = Math.pow(10, Math.floor(Math.log10(increment)));
+        increment = Math.round(increment / order) * order;
+
+        min = Math.floor(min/increment) * increment;
+        max = Math.ceil(max/increment) * increment;
+
+        if (Math.max(a, b) <= max)
+          max += increment;
+
+        if (Math.min(a, b) >= min)
+          min -= increment;
+
+        return [min, max, increment];
+      }
+
+      function draw(a, b, dotted = false, faint = false){
+        context.beginPath();
+        context.moveTo(a[0], a[1]);
+        context.lineTo(b[0], b[1]);
+        context.setLineDash(dotted ? [5, 10] : []);
+        context.lineWidth = faint ? 0.5: 1;
+        context.stroke();
+      }
+
+      function plot(a, b, dotted = false, faint = false){
+        draw(toCanvasCoordinates(a), toCanvasCoordinates(b), dotted, faint);
+      }
+
+      function toCanvasCoordinates(a){
+        return [size_x * (a[0] - min_x) / (max_x - min_x), 
+                size_y - (size_y * (a[1] - min_y) / (max_y - min_y)) ]
+      }
+
+      var canvas = document.getElementById('myCanvas');
+      var context = canvas.getContext('2d');
+      context.font = "10px Arial";
+      context.fillStyle = 'black';
+      context.strokeStyle = "rgb(51,255,0)";
+
+      let size_x = 800;
+      let size_y = 600;
+      let origin_x = size_x/2;
+      let origin_y = size_y/2;
+
+      let increment_x;
+      let min_x;
+      let max_x;
+      let increment_y;
+      let min_y;
+      let max_y; 
+
+      drawGraph();
+
+      function readCoordinates(id) {
+        coordinates = document.getElementById(id).value.split(',');
+
+        if(coordinates.length == 2)
+        {
+          let result = [parseFloat(coordinates[0]), parseFloat(coordinates[1])];
+          if (!isNaN(result[0]) && !isNaN(result[1]))
+            return result;
+        }
+        
+        return [0,0];
+      }
+
+      function drawGraph(){
+        context.fillRect(0, 0, canvas.width, canvas.height);
+
+        let A = readCoordinates("A");
+        let B = readCoordinates("B");
+
+        calculateAxes(A, B);
+
+        plot([min_x, 0], [max_x, 0]);
+        plot([0, min_y], [0, max_y]);
+
+        for (let x = min_x; x <= max_x; x += increment_x){
+          let xc = toCanvasCoordinates([x, 0]);
+          draw(xc, [xc[0], xc[1] + -5]);
+
+          if (x != 0){
+            write(x, [x, 0], [-2, -8]);
+          }
+        }
+
+        for (let y = min_y; y <= max_y; y += increment_y){
+          let yc = toCanvasCoordinates([0, y]);
+          draw(yc, [yc[0] + 5, yc[1]]);
+
+          if (y != 0){
+            write(y, [0,y], [10, 3]);
+          }
+        }
+
+        function write(text, at, adjustment){
+          let textPosition = toCanvasCoordinates(at);
+          textPosition = [textPosition[0] + adjustment[0], textPosition[1] + adjustment[1]];
+          context.strokeText(text, textPosition[0], textPosition[1]);
+        }
+
+        plot(A, B);
+        drawDot(A);
+        drawDot(B);
+        write('A', A, [-14, 0]);
+        write('B', B, [-14, 0]);
+
+        drawAxisMarkers(A, B);
+
+        if (document.getElementById("extend").checked)
+          extend(A, B);
+
+        if (document.getElementById("triangleBelow").checked)
+          drawTriangle(A, B);
+
+         if (document.getElementById("triangleAbove").checked)
+          drawTriangle(A, B, false);
+      }
+
+      function drawAxisMarkers(a, b){
+        plot([0, a[1]], a, false, true);
+        plot([a[0], 0], a, false, true);
+        plot([0, b[1]], b, false, true);
+        plot([b[0], 0], b, false, true);
+      }
+
+      function drawTriangle(a, b, below = true){
+        if (a[1] > b[1])
+          below = !below;
+
+        let c = below ? [b[0], a[1]] : [a[0], b[1]];
+
+        plot(a, c, true);
+        plot(c, b, true);
+
+      }
+
+      function slope(a, b){
+        if (a[0] == b[0])
+          return Infinity;
+
+        return (b[1]-a[1])/([b[0]-a[0]]);
+      }
+
+      function extend(a, b){
+        if (a[0] == b[0])
+        {
+          plot([a[0], min_y], [a[0], max_y]);
+          return; 
+        }
+
+        let m = slope(a, b);
+        let c = a[1] - m * a[0];
+
+        plot([min_x, m * min_x + c], [max_x, m * max_x + c]);
+      }
+
+      function drawDot(at){
+        let position = toCanvasCoordinates(at);
+        let radius = 2;
+        context.beginPath();
+        context.arc(position[0], position[1], radius, 0, 2 * Math.PI);
+        context.fill();
+        context.stroke(); 
+      }
+ 
+    </script>
+  </body>
+</html>      
