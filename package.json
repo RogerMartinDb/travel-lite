@@ -20,8 +20,8 @@
       "target": "http://api.irishrail.ie",
       "changeOrigin": true
     },
-    "/Text": {
-      "target": "http://www.rtpi.ie",
+    "/DublinBus-Mobile": {
+      "target": "http://www.dublinbus.ie",
       "changeOrigin": true
     }
   },

@@ -63,7 +63,7 @@ export default class Collator{
   }
 
   busHandler = {
-    url: (option)=>`/Text/WebDisplay.aspx?stopRef=${option.stopId}`,
+    url: (option)=>`DublinBus-Mobile/Real-Time-Info/?RTPISearch=stops&stopnumber=${option.stopId}`,
     xmlParser: (option, xml, departures)=>{
       let buses = xml.querySelectorAll("tr");
       
@@ -73,8 +73,8 @@ export default class Collator{
         departures.push({
           option: option.id,
           service: cells[0].textContent,
-          destination: cells[2].textContent,
-          dueString: cells[4].textContent,
+          destination: cells[1].textContent,
+          dueString: cells[2].textContent,
         })
       };
     }

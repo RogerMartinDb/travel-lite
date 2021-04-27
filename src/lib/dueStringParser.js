@@ -31,7 +31,7 @@ export default class DueStringParser{
       return;
     }
 
-    match = dueString.match(/^(\d+) Min/);
+    match = dueString.match(/(\d+) min/);
     
     if (match)
     {
