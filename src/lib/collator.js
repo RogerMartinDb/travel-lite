@@ -37,10 +37,10 @@ export default class Collator{
   }
 
   trainHandler = {
-    url: (option)=>`/realtime/realtime.asmx/getStationDataByCodeXML_WithNumMins?StationCode=${option.stationId}&NumMins=60`,
+    url: (option)=>`https://transport.rmartin.workers.dev/realtime/realtime.asmx/getStationDataByCodeXML_WithNumMins?StationCode=${option.stationId}&NumMins=60`,
     xmlParser: (option, xml, departures)=>{
       let trains = xml.getElementsByTagName('objStationData');
-      
+
       for (let i = 0; i < trains.length; ++i){
         let train = trains[i];
 
@@ -63,10 +63,10 @@ export default class Collator{
   }
 
   busHandler = {
-    url: (option)=>`DublinBus-Mobile/Real-Time-Info/?RTPISearch=stops&stopnumber=${option.stopId}`,
+    url: (option)=>`https://transport.rmartin.workers.dev/DublinBus-Mobile/Real-Time-Info/?RTPISearch=stops&stopnumber=${option.stopId}`,
     xmlParser: (option, xml, departures)=>{
       let buses = xml.querySelectorAll("tr");
-      
+
       for (let i = 1; i < buses.length; ++i){
         let cells = buses[i].children;
 
