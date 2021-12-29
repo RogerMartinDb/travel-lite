@@ -1,7 +1,9 @@
 export default class DueStringParser{
   constructor(dueString, now = new Date()){
     now.setSeconds(0);
-    
+
+    dueString = dueString.trim()
+
     if (dueString === "Due")
     {
         this.minutes = 0;
@@ -32,7 +34,7 @@ export default class DueStringParser{
     }
 
     match = dueString.match(/(\d+) min/);
-    
+
     if (match)
     {
         this.minutes = parseInt(match[1], 10);
@@ -51,7 +53,7 @@ export default class DueStringParser{
   }
 
   timeString(date){
-    return ("0" + date.getHours()).slice(-2) + ":" + 
+    return ("0" + date.getHours()).slice(-2) + ":" +
             ("0" + date.getMinutes()).slice(-2);
   }
 
