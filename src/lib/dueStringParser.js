@@ -12,33 +12,39 @@ export default class DueStringParser{
         return;
     }
 
-    let match = dueString.match(/^(\d\d):(\d\d)$/);
+    let dueTime = new Date(dueString);
 
-    if(match){
-      let hour = parseInt(match[1], 10);
-      let minute = parseInt(match[2], 10);
+    if (isNaN(dueTime)) {
+      let match = dueString.match(/^(\d\d):(\d\d)$/);
 
-      let dueTime = new Date(now.getFullYear(), now.getMonth(), now.getDate(), hour, minute);
+      if(match){
+        let hour = parseInt(match[1], 10);
+        let minute = parseInt(match[2], 10);
 
-      if (now.getHours() - hour > 12)
-        dueTime.setDate(dueTime.getDate() + 1);  // tomorrow
+        dueTime = new Date(now.getFullYear(), now.getMonth(), now.getDate(), hour, minute);
 
+        if (now.getHours() - hour > 12)
+          dueTime.setDate(dueTime.getDate() + 1);  // tomorrow
+      }
+    }
+
+    if(!isNaN(dueTime)) {
       let minutes = Math.trunc((dueTime - now)/1000/60);
       if (minutes < 0) minutes = 0;
 
       this.minutes = minutes;
-      this.dueAbsolute = dueString;
+      this.dueAbsolute = this.timeString(dueTime);
       this.dueRelative = minutes === 0 ? "Due" : `${minutes} min`;
 
       return;
     }
 
-    match = dueString.match(/(\d+) min/);
+    let match = dueString.match(/(\d+) min/);
 
     if (match)
     {
         this.minutes = parseInt(match[1], 10);
-        let dueTime = now;
+        dueTime = now;
         dueTime.setMinutes(now.getMinutes() + this.minutes);
         this.dueAbsolute = this.timeString(dueTime);
         this.dueRelative = `${this.minutes} min`;
