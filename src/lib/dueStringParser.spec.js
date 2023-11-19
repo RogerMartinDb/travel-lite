@@ -1,55 +1,118 @@
 import DueStringParser from './dueStringParser';
 
-it('handles Due', ()=>{
-  let now = new Date('2017-11-10T10:05:10')
-  let sut = new DueStringParser('Due', now);
+describe('DueStringParser', () => {
+  describe('when given "Due"', () => {
+    it('sets minutes to 0', () => {
+      const now = new Date('2017-11-10T10:05:10');
+      const parser = new DueStringParser('Due', now);
 
-  expect(sut.minutes).toEqual(0);
-  expect(sut.dueRelative).toEqual('Due');
-  expect(sut.dueAbsolute).toEqual('10:05');
-})
+      expect(parser.minutes).toBe(0);
+    });
 
-it('handles given time', ()=>{
-  let now = new Date('2017-11-10T10:05:10')
-  let sut = new DueStringParser('12:30', now);
+    it('sets dueRelative to "Due"', () => {
+      const now = new Date('2017-11-10T10:05:10');
+      const parser = new DueStringParser('Due', now);
 
-  expect(sut.minutes).toEqual(145);
-  expect(sut.dueRelative).toEqual('145 min');
-  expect(sut.dueAbsolute).toEqual('12:30');
-})
+      expect(parser.dueRelative).toBe('Due');
+    });
 
-it('handles given time in past', ()=>{
-  let now = new Date('2017-11-10T10:05:10')
-  let sut = new DueStringParser('10:04', now);
+    it('sets dueAbsolute to the current time', () => {
+      const now = new Date('2017-11-10T10:05:10');
+      const parser = new DueStringParser('Due', now);
 
-  expect(sut.minutes).toEqual(0);
-  expect(sut.dueRelative).toEqual('Due');
-  expect(sut.dueAbsolute).toEqual('10:04');
-})
+      expect(parser.dueAbsolute).toBe('10:05');
+    });
+  });
 
-it('handles given time tomorrow', ()=>{
-  let now = new Date('2017-11-10T23:05:10')
-  let sut = new DueStringParser('01:10', now);
+  describe('when given a time', () => {
+    it('calculates the correct number of minutes', () => {
+      const now = new Date('2017-11-10T10:05:10');
+      const parser = new DueStringParser('12:30', now);
 
-  expect(sut.minutes).toEqual(125);
-  expect(sut.dueRelative).toEqual('125 min');
-  expect(sut.dueAbsolute).toEqual('01:10');
-})
+      expect(parser.minutes).toBe(145);
+    });
 
-it('handles number of mins', ()=>{
-  let now = new Date('2017-11-10T10:05:10')
-  let sut = new DueStringParser('12 Mins', now);
+    it('sets dueRelative to the correct value', () => {
+      const now = new Date('2017-11-10T10:05:10');
+      const parser = new DueStringParser('12:30', now);
 
-  expect(sut.minutes).toEqual(12);
-  expect(sut.dueRelative).toEqual('12 min');
-  expect(sut.dueAbsolute).toEqual('10:17');
-})
+      expect(parser.dueRelative).toBe('145 min');
+    });
 
-it('bad due string', ()=>{
-  let now = new Date('2017-11-10T10:05:10')
-  let sut = new DueStringParser('blah', now);
+    it('sets dueAbsolute to the given time', () => {
+      const now = new Date('2017-11-10T10:05:10');
+      const parser = new DueStringParser('12:30', now);
 
-  expect(sut.minutes).toEqual(0);
-  expect(sut.dueRelative).toEqual('blah!');
-  expect(sut.dueAbsolute).toEqual('');
-})
+      expect(parser.dueAbsolute).toBe('12:30');
+    });
+  });
+
+  describe('when given a time in the past', () => {
+    it('sets minutes to 0', () => {
+      const now = new Date('2017-11-10T10:05:10');
+      const parser = new DueStringParser('10:04', now);
+
+      expect(parser.minutes).toBe(0);
+    });
+
+    it('sets dueRelative to "Due"', () => {
+      const now = new Date('2017-11-10T10:05:10');
+      const parser = new DueStringParser('10:04', now);
+
+      expect(parser.dueRelative).toBe('Due');
+    });
+
+    it('sets dueAbsolute to the given time', () => {
+      const now = new Date('2017-11-10T10:05:10');
+      const parser = new DueStringParser('10:04', now);
+
+      expect(parser.dueAbsolute).toBe('10:04');
+    });
+  });
+
+  describe('when given a time tomorrow', () => {
+    it('calculates the correct number of minutes', () => {
+      const now = new Date('2017-11-10T23:05:10');
+      const parser = new DueStringParser('01:10', now);
+
+      expect(parser.minutes).toBe(125);
+    });
+
+    it('sets dueRelative to the correct value', () => {
+      const now = new Date('2017-11-10T23:05:10');
+      const parser = new DueStringParser('01:10', now);
+
+      expect(parser.dueRelative).toBe('125 min');
+    });
+
+    it('sets dueAbsolute to the given time', () => {
+      const now = new Date('2017-11-10T23:05:10');
+      const parser = new DueStringParser('01:10', now);
+
+      expect(parser.dueAbsolute).toBe('01:10');
+    });
+  });
+
+  describe('when given an invalid due string', () => {
+    it('sets minutes to 0', () => {
+      const now = new Date('2017-11-10T10:05:10');
+      const parser = new DueStringParser('blah', now);
+
+      expect(parser.minutes).toBe(0);
+    });
+
+    it('sets dueRelative to the given string with an exclamation mark', () => {
+      const now = new Date('2017-11-10T10:05:10');
+      const parser = new DueStringParser('blah', now);
+
+      expect(parser.dueRelative).toBe('blah!');
+    });
+
+    it('sets dueAbsolute to an empty string', () => {
+      const now = new Date('2017-11-10T10:05:10');
+      const parser = new DueStringParser('blah', now);
+
+      expect(parser.dueAbsolute).toBe('');
+    });
+  });
+});
