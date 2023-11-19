@@ -81,10 +81,10 @@ export default class Collator {
 
             let trainType = train.querySelector("Traintype").textContent;
 
-            if (trainType === "DART") {
+            if (trainType === "DART10") {
               freshDepartures.push({
                 option: option.id,
-                service: trainType,
+                service: "🚆",
                 destination: train.querySelector('Destination').textContent,
                 dueString: train.querySelector("Expdepart").textContent,
               })
