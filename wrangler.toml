@@ -2,7 +2,7 @@ name = "travel-lite"
 type = "webpack"
 route = 'travel-lite.bimis.net/*'
 zone_id = ''
-usage_model = ''
+usage_model = 'bundled'
 compatibility_flags = []
 workers_dev = true
 site = {bucket = "./build",entry-point = "workers-site"}

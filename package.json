@@ -36,5 +36,8 @@
   "bugs": {
     "url": "https://github.com/RogerMartinDb/travel-lite/issues"
   },
-  "homepage": ""
+  "homepage": "",
+  "devDependencies": {
+    "wrangler": "^3.16.0"
+  }
 }
