@@ -9,22 +9,26 @@ export default class Collator {
   fetchDepartures(onUpdate) {
     const maxDeparturesPerType = 6;
 
-    this.journeyOptions.forEach(option => {
+    const promises = this.journeyOptions.map(option => {
       const handler = (option.type === "Train") ? this.trainHandler : this.busHandler;
 
-      handler.getFreshDepartures(option, (freshDepartures) => {
-        this.replaceDepartures(freshDepartures);
-        this.processDueString(this.departures);
-        onUpdate(this.departures.slice(0, maxDeparturesPerType));
-      });
+      return handler.getFreshDepartures(option)
+        .then(freshDepartures => {
+          this.replaceDepartures(freshDepartures);
+          this.processDueString(this.departures);
+          onUpdate(this.departures.slice(0, maxDeparturesPerType));
+        })
+        .catch(error => console.error("Error fetching data:", error));
     });
+
+    return Promise.all(promises);
   }
 
   busHandler = {
-    getFreshDepartures: async (option, process) => {
+    getFreshDepartures: (option) => {
       const now = new Date();
       const body = {
-        "clientTimeZoneOffsetInMS": now.getTimezoneOffset() * 6000, // off by factor of 10, but copying from scrape
+        "clientTimeZoneOffsetInMS": now.getTimezoneOffset() * 6000,
         "departureDate": now,
         "departureTime": now,
         "stopIds": [`8220DB000${option.stopId}`],
@@ -34,39 +38,34 @@ export default class Collator {
         "refresh": false
       };
 
-      fetch("https://api-lts.transportforireland.ie/lts/lts/v1/public/departures", {
-        "headers": {
+      return fetch("https://api-lts.transportforireland.ie/lts/lts/v1/public/departures", {
+        method: "POST",
+        headers: {
           "accept": "application/json, text/plain, */*",
           "content-type": "application/json",
           "ocp-apim-subscription-key": "630688984d38409689932a37a8641bb9",
           "pragma": "no-cache"
         },
-        "body": JSON.stringify(body),
-        "method": "POST"
+        body: JSON.stringify(body),
       })
-        .then(raw => raw.json())
-        .then(response => {
-          process(response.stopDepartures
-            .map(dep => {
-              return {
-                option: option.id,
-                service: dep.serviceNumber,
-                destination: dep.destination,
-                dueString: dep.realTimeDeparture || dep.scheduledDeparture
-              }
-            })
-            .filter(dep => Date.parse(dep.dueString) > now)
-          );
-        })
-        .catch(error => console.error(error));
+        .then(response => response.json())
+        .then(data => data.stopDepartures
+          .map(dep => ({
+            option: option.id,
+            service: dep.serviceNumber,
+            destination: dep.destination,
+            dueString: dep.realTimeDeparture || dep.scheduledDeparture
+          }))
+          .filter(dep => Date.parse(dep.dueString) > now)
+        );
     }
   }
 
   trainHandler = {
-    getFreshDepartures: (option, process) => {
+    getFreshDepartures: (option) => {
       const url = `https://transport.rmartin.workers.dev/realtime/realtime.asmx/getStationDataByCodeXML_WithNumMins?StationCode=${option.stationId}&NumMins=60`;
 
-      fetch(url)
+      return fetch(url)
         .then(response => response.text())
         .then(data => {
           const parser = new DOMParser();
@@ -89,10 +88,11 @@ export default class Collator {
             }
           }
 
-          process(freshDepartures);
+          return freshDepartures;
         })
         .catch(error => {
           console.error("Error fetching data:", error);
+          return [];
         });
     }
   };
@@ -116,6 +116,6 @@ export default class Collator {
       }
     });
 
-    departures.sort((a, b) => { return a.minutes - b.minutes });
+    departures.sort((a, b) => a.minutes - b.minutes);
   }
 }
