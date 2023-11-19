@@ -66,37 +66,36 @@ export default class Collator {
     getFreshDepartures: (option, process) => {
       const url = `https://transport.rmartin.workers.dev/realtime/realtime.asmx/getStationDataByCodeXML_WithNumMins?StationCode=${option.stationId}&NumMins=60`;
 
-      const freshDepartures = [];
+      fetch(url)
+        .then(response => response.text())
+        .then(data => {
+          const parser = new DOMParser();
+          const xmlDoc = parser.parseFromString(data, 'text/xml');
+          const trains = xmlDoc.getElementsByTagName('objStationData');
+          const freshDepartures = [];
 
-      let xhr = new XMLHttpRequest();
-      xhr.responseType = "document";
-      xhr.open('GET', url, true);
-      xhr.onload = () => {
-        let trains = xhr.responseXML.getElementsByTagName('objStationData');
+          for (const train of trains) {
+            if (train.querySelector("Direction").textContent === option.direction) {
+              const trainType = train.querySelector("Traintype").textContent;
 
-        for (let i = 0; i < trains.length; ++i) {
-          let train = trains[i];
-
-          if (train.querySelector("Direction").textContent === option.direction) {
-
-            let trainType = train.querySelector("Traintype").textContent;
-
-            if (trainType === "DART10") {
-              freshDepartures.push({
-                option: option.id,
-                service: "🚆",
-                destination: train.querySelector('Destination').textContent,
-                dueString: train.querySelector("Expdepart").textContent,
-              })
+              if (trainType === "DART10") {
+                freshDepartures.push({
+                  option: option.id,
+                  service: "🚆",
+                  destination: train.querySelector('Destination').textContent,
+                  dueString: train.querySelector("Expdepart").textContent,
+                });
+              }
             }
           }
-        }
 
-        process(freshDepartures);
-      };
-      xhr.send();
+          process(freshDepartures);
+        })
+        .catch(error => {
+          console.error("Error fetching data:", error);
+        });
     }
-  }
+  };
 
   replaceDepartures(freshDepartures) {
     if (freshDepartures.length === 0) {
