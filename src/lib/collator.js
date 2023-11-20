@@ -77,7 +77,7 @@ export default class Collator {
             if (train.querySelector("Direction").textContent === option.direction) {
               const trainType = train.querySelector("Traintype").textContent;
 
-              if (trainType === "DART10") {
+              if (trainType.startsWith("DART")) {
                 freshDepartures.push({
                   option: option.id,
                   service: "🚆",
