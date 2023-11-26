@@ -9,6 +9,12 @@ import { getAssetFromKV, mapRequestToAsset } from '@cloudflare/kv-asset-handler'
  */
 const DEBUG = false
 
+const proxy = {
+  "/realtime": {
+    target: 'https://api.irishrail.ie'
+  }
+}
+
 addEventListener('fetch', event => {
   try {
     event.respondWith(handleEvent(event))
@@ -27,6 +33,20 @@ addEventListener('fetch', event => {
 async function handleEvent(event) {
   const url = new URL(event.request.url)
   let options = {}
+
+  // proxy if necessary
+  const pathname = url.pathname;
+  for (const root of Object.keys(proxy)) {
+    if (pathname.startsWith(root)) {
+      const target = new URL(proxy[root].target)
+      const forwardTo = new URL(url)
+      forwardTo.protocol = target.protocol;
+      forwardTo.hostname = target.hostname;
+      forwardTo.port = target.port;
+
+      return fetch(forwardTo);
+    }
+  }
 
   /**
    * You can add custom logic to how we fetch your assets
