@@ -7,14 +7,17 @@
     "http-proxy-middleware": "^2.0.6",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-page-visibility": "^7.0.0",
-    "react-scripts": "^5.0.1"
+    "react-page-visibility": "^7.0.0"
   },
   "scripts": {
     "start": "react-scripts start",
     "build": "CI=true react-scripts test --watchAll=false && react-scripts build && wrangler deploy",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
+  },
+  "devDependencies": {
+    "wrangler": "^3.17.1",
+    "react-scripts": "^5.0.1"
   },
   "description": "This project was bootstrapped with [Create React App](https://github.com/facebookincubator/create-react-app).",
   "main": "index.js",
@@ -28,9 +31,6 @@
     "url": "https://github.com/RogerMartinDb/travel-lite/issues"
   },
   "homepage": "",
-  "devDependencies": {
-    "wrangler": "^3.17.1"
-  },
   "browserslist": {
     "production": [
       ">0.2%",
