@@ -4,26 +4,17 @@
   "private": true,
   "dependencies": {
     "bootstrap": "^4.0.0-beta.2",
+    "http-proxy-middleware": "^2.0.6",
     "react": "^16.0.0",
     "react-dom": "^16.13.1",
     "react-page-visibility": "^1.0.0",
-    "react-scripts": "^1.0.14"
+    "react-scripts": "^5.0.1"
   },
   "scripts": {
     "start": "react-scripts start",
     "build": "CI=true react-scripts test --watchAll=false && react-scripts build && wrangler deploy",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
-  },
-  "proxy": {
-    "/realtime": {
-      "target": "http://api.irishrail.ie",
-      "changeOrigin": true
-    },
-    "/DublinBus-Mobile": {
-      "target": "http://www.dublinbus.ie",
-      "changeOrigin": true
-    }
   },
   "description": "This project was bootstrapped with [Create React App](https://github.com/facebookincubator/create-react-app).",
   "main": "index.js",
@@ -38,6 +29,18 @@
   },
   "homepage": "",
   "devDependencies": {
-    "wrangler": "^3.16.0"
+    "wrangler": "^3.17.1"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
   }
 }

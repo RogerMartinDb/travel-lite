@@ -63,7 +63,7 @@ export default class Collator {
 
   trainHandler = {
     getFreshDepartures: (option) => {
-      const url = `https://transport.rmartin.workers.dev/realtime/realtime.asmx/getStationDataByCodeXML_WithNumMins?StationCode=${option.stationId}&NumMins=60`;
+      const url = `/realtime/realtime.asmx/getStationDataByCodeXML_WithNumMins?StationCode=${option.stationId}&NumMins=60`;
 
       return fetch(url)
         .then(response => response.text())
