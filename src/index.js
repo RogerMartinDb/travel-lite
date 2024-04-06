@@ -7,7 +7,22 @@ import './index.css';
 
 let jd=[
   {
-    name: 'Home to town',
+    name: 'From Castleforbes Square',
+    options: [
+      {
+        id: 1,
+        type: "Bus",
+        stopId: '7844'
+      },
+      {
+        id: 2,
+        type: "Luas",
+        stopId: '0436'
+      }
+    ]
+  },
+  {
+    name: 'Dunluce to town',
     options: [
       {
         id: 1,
@@ -18,7 +33,7 @@ let jd=[
       {
         id: 2,
         type: "Bus",
-        stopId: '608'
+        stopId: '0608'
       }
     ]
   },
@@ -28,12 +43,12 @@ let jd=[
       {
         id: 1,
         type: "Bus",
-        stopId: '526'
+        stopId: '0526'
       }
     ]
   },
   {
-    name: 'Work to  home',
+    name: 'Pearse to north',
     options: [
       {
         id: 1,

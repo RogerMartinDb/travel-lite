@@ -10,7 +10,7 @@ export default class Collator {
     const maxDeparturesPerType = 6;
 
     const promises = this.journeyOptions.map(option => {
-      const handler = (option.type === "Train") ? this.trainHandler : this.busHandler;
+      const handler = (option.type === "Train") ? this.trainHandler : this.busLuasHandler;
 
       return handler.getFreshDepartures(option)
         .then(freshDepartures => {
@@ -24,14 +24,14 @@ export default class Collator {
     return Promise.all(promises);
   }
 
-  busHandler = {
+  busLuasHandler = {
     getFreshDepartures: (option) => {
       const now = new Date();
       const body = {
         "clientTimeZoneOffsetInMS": now.getTimezoneOffset() * 6000,
         "departureDate": now,
         "departureTime": now,
-        "stopIds": [`8220DB000${option.stopId}`],
+        "stopIds": [option.type === "Bus" ? `8220DB00${option.stopId}` : `8220GA0${option.stopId}`],
         "stopType": "BUS_STOP",
         "requestTime": now,
         "departureOrArrival": "DEPARTURE",
