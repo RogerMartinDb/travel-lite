@@ -16,8 +16,8 @@
     "eject": "react-scripts eject"
   },
   "devDependencies": {
-    "wrangler": "^3.17.1",
-    "react-scripts": "^5.0.1"
+    "react-scripts": "^5.0.1",
+    "wrangler": "^3.17.1"
   },
   "description": "This project was bootstrapped with [Create React App](https://github.com/facebookincubator/create-react-app).",
   "main": "index.js",
