@@ -52,7 +52,7 @@ export default class Collator {
         .then(data => data.stopDepartures
           .map(dep => ({
             option: option.id,
-            service: dep.serviceNumber,
+            service: option.type === 'Luas' ? '🚊' : dep.serviceNumber,
             destination: dep.destination,
             dueString: dep.realTimeDeparture || dep.scheduledDeparture
           }))
